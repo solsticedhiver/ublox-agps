@@ -3,27 +3,34 @@
 import requests
 import serial
 import sys
+import argparse
+import os
 
-# You can hard-code the token and device below
-token = ""
-device = ""
+parser = argparse.ArgumentParser(description='Retrieve aiding data and update GPS module')
+parser.add_argument('-t', '--token', required=True, help='your token to access AssistNow data site')
+parser.add_argument('-d', '--device', required=True, help='the device/port where the GPS device is')
 
-if token == "" or device == "":
-    print("Error: no token or device specified", file=sys.stderr)
+args = parser.parse_args()
+
+if not os.path.exists(args.device):
+    print(f'Error: device {args.device} does not exist', file=sys.stderr)
+    sys.exit(1)
+if not os.access(args.device, os.W_OK):
+    print(f'Error: device {args.device} is not writable', file=sys.stderr)
     sys.exit(1)
 
-url = f"http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid"
+url = f"http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid"
 print("Downloading A-GPS data")
 r = requests.get(url)
 
-ser = serial.Serial(device, 9600)
+ser = serial.Serial(args.device, 9600)
 print("Waiting for GPS to be free")
 drainer = True
 while drainer:
     drainer = ser.inWaiting()
     ser.read(drainer)
 
-print(f"Writing AGPS data to {device}")
+print(f"Writing AGPS data to {args.device}")
 ser.write(r.content)
 print("Done")
 
