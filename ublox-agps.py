@@ -1,36 +1,43 @@
- #Autor: Jesús Sánchez Sänchez (gokuhs)
- #Based on veproza proyect: https://gist.github.com/veproza/55ec6eaa612781ac29e7
+#!/bin/env /usr/bin/python3
+
 import requests
 import serial
+import sys
 
-#Edit me!!
-token = "<< Your tokken >>" #Token getted from u-blox
-comPort = "<< Your GPS Module COM port >>" #GPS Com port
+# You can hard-code the token and device below
+token = ""
+device = ""
 
-print "Connecting to u-blox"
-r = requests.get("http://online-live1.services.u-blox.com/GetOnlineData.ashx?token=" + token + ";gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid", stream=True)
-print "Downloading A-GPS data"
+if token == "" or device == "":
+    print("Error: no token or device specified", file=sys.stderr)
+    sys.exit(1)
 
-ser = serial.Serial(comPort, 9600)
-print "Waiting to GPS be free"
+url = f"http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid"
+print("Connecting to u-blox")
+r = requests.get(url)
+print("Downloading A-GPS data")
+
+ser = serial.Serial(device, 9600)
+print("Waiting to GPS be free")
 drainer = True
 while drainer:
     drainer = ser.inWaiting()
     ser.read(drainer)
 
-print "Writing AGPS data"
+print("Writing AGPS data")
 ser.write(r.content)
-print "Done"
+print("Done")
 
+print("Reading GPS data: hit CTRL-C to quit")
 buffer = True
-message = ""
+message = b""
 try:
     while buffer:
         buffer = ser.read()
-        if buffer == "$":
-            if message.startswith("$GPGGA"):
-                print message.strip()
-            message = ""
+        if buffer == b"$":
+            if message.startswith(b"$GPGGA"):
+                print(message.strip().decode())
+            message = b""
         message = message + buffer
 except KeyboardInterrupt:
     ser.close()
