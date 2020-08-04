@@ -22,6 +22,9 @@ if not os.access(args.device, os.W_OK):
 url = f'http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid'
 print('Downloading A-GPS data')
 r = requests.get(url)
+if r.status_code != 200:
+    print(f'Error {r.status_code} {r.content.decode()}', file=sys.stderr)
+    sys.exit(1)
 
 ser = serial.Serial(args.device, 9600)
 print('Waiting for GPS to be free')
