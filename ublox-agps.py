@@ -13,18 +13,17 @@ if token == "" or device == "":
     sys.exit(1)
 
 url = f"http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid"
-print("Connecting to u-blox")
-r = requests.get(url)
 print("Downloading A-GPS data")
+r = requests.get(url)
 
 ser = serial.Serial(device, 9600)
-print("Waiting to GPS be free")
+print("Waiting for GPS to be free")
 drainer = True
 while drainer:
     drainer = ser.inWaiting()
     ser.read(drainer)
 
-print("Writing AGPS data")
+print(f"Writing AGPS data to {device}")
 ser.write(r.content)
 print("Done")
 
