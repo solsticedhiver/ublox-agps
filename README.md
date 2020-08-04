@@ -1,43 +1,39 @@
 # ublox-agps
-Example of sending the agps data to the GPS module
+Script to send aiding data to a u-blox GPS module (aka agps)
 
-This is a simple exaple on pyton to write a Assist GPS data downloaded from de u-blox serer to out GPS Module.
-First we need to get an access tokken. To do go to this web: https://www.u-blox.com/en/assistnow-service-registration-form and summit the form. In 24 hours you will received an a similar menssage to this:
+This is a simple example in python to write AssistNow GPS data downloaded from u-blox server to a u-blox GPS Module.
 
-## Get an a tokken
+1. Request an access token
 
-Dear XXXXXX
+  To do so, go to the web site: https://www.u-blox.com/en/assistnow-service-registration-form and submit the form. In 24 hours, you will receive a message similar to this:
 
-Thank you for your interest in u-blox' online, globally-available assisted GNSS service, AssistNow.
-The service ensures a fast Time-To-First-Fix when using u-blox GNSS receivers, even under poor satellite signal conditions.
+> Get a token
+>
+> Dear XXXXXX
+>
+> Thank you for your interest in u-blox' online, globally-available assisted GNSS service, AssistNow.
+> The service ensures a fast Time-To-First-Fix when using u-blox GNSS receivers, even under poor satellite signal conditions.
+>
+> The token you will require for initial setup of the service is below.
+>
+> Token: YYYYYYYYYY
+>
+> A description of the AssistNow features and services can be found on the following web page:
+>
+> http://www.u-blox.com/en/assisted-gps.html
+>
+>
+> Kind regards
+> u-blox
 
-The token you will require for initial setup of the service is below.
+2. Configure the script
 
-Token: **XXXXXXXXXX**
+You can either specify the token and the device on the command line by using the `-t` switch and the `-d` switch, or you can modify the script to hard-code both of the variables.
 
-A description of the AssistNow features and services can be found on the following web page:
+3. Run the script with
 
-http://www.u-blox.com/en/assisted-gps.html
+`python ublox-agps.py -t YYYYYYYYYY -d /dev/ttyACM0`
 
+**Note:** The idea of this project came from: https://gist.github.com/veproza/55ec6eaa612781ac29e7
 
-Kind regards
-u-blox
-
-# Configure the script
-
-## Add the token to the script
-Go to the PyThon file and replace "<< Your tokken >>" with your tokken
-
-## Set the COM port
-Go to the PyThon file and replace "<< Your GPS Module COM port >>" with your tokken. In Debian/Ubuntu Linux the COM port usualy is "/dev/ttyACM0"
-
-# Run the script
-
-`python u-blox_agps.py`
-
-# Original Author
-The idea of this project is from: https://gist.github.com/veproza/55ec6eaa612781ac29e7
-
-Tested in ublox-7 (u7) módule
-
-
+Tested in ublox-7 (u7) module
