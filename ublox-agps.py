@@ -7,8 +7,6 @@ import argparse
 import os
 import struct
 
-DEBUG = False
-
 def checksum(data):
     a = b = 0
     for d in data:
@@ -22,6 +20,7 @@ def is_checksum_ok(ck_a, ck_b, data):
     return checksum(data) == (ck_a, ck_b)
 
 parser = argparse.ArgumentParser(description='Retrieve aiding data and update GPS module')
+parser.add_argument('--debug', action='store_true', help='add more verbose message')
 parser.add_argument('--lat', type=float, help='your longitude')
 parser.add_argument('--lon', type=float, help='your latitude')
 parser.add_argument('-t', '--token', required=True, help='your token to access AssistNow data site')
@@ -65,7 +64,7 @@ while is_valid and indx < len(data):
         length = struct.unpack('<H', bytes(data[indx+4:indx+6]))[0]
         payload = data[indx+2:indx+5+length+1]
         check = is_checksum_ok(data[indx+5+length+1], data[indx+5+length+2], payload)
-        if DEBUG:
+        if args.debug:
             ok = "OK" if check else "NOT OK"
             print(f'Found header {hex(data[indx+2])}/{hex(data[indx+3])} at {indx}, {length} bytes, checksum {ok}')
         indx += 5+length+3

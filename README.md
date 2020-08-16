@@ -27,7 +27,13 @@ This is a simple python script to download AssistNow data from the u-blox server
 
 For example:
 
-    python3 ublox-agps.py -t YYYYYYYYYY -d /dev/gps0
+    $ python3 ublox-agps.py -t YYYYYYYYYY -d /dev/gps0
+    Downloading A-GPS data from u-blox server
+    Checksums are OK
+    Waiting for GPS to be free
+    Writing AGPS data to /dev/gps0
+    Done
+    :: Warning: we have not checked that the dongle acknowledged the data sent
 
 You can specify your latitude and longitude to get better ephemeris from the server:
 
