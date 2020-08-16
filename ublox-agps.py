@@ -40,7 +40,7 @@ if (args.lat and not args.lon) or (args.lat and not args.lon):
     print('Error: you need to use both latitude and longitude', file=sys.stderr)
     sys.exit(1)
 
-url = f'http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid'
+url = f'https://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid'
 if args.lat and args.lon:
     if args.lat > 90 or args.lat < -90 or args.lon > 180 or args.lon < -180:
         print('Error: latitude or longitude not in expected range', file=sys.stderr)
