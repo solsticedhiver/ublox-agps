@@ -87,17 +87,4 @@ while drainer:
 print(f'Writing AGPS data to {args.device}')
 ser.write(r.content)
 print('Done')
-
-print('Reading GPS data: hit CTRL-C to quit')
-buffer = True
-message = b''
-try:
-    while buffer:
-        buffer = ser.read()
-        if buffer == b'$':
-            if message.startswith(b'$GPGGA'):
-                print(message.strip().decode())
-            message = b''
-        message = message + buffer
-except KeyboardInterrupt:
-    ser.close()
+print(':: Warning: we have not checked that the dongle acknowledged the data sent')
