@@ -23,8 +23,9 @@ parser = argparse.ArgumentParser(description='Retrieve aiding data and update GP
 parser.add_argument('--debug', action='store_true', help='add more verbose message')
 parser.add_argument('--lat', type=float, help='your longitude')
 parser.add_argument('--lon', type=float, help='your latitude')
+parser.add_argument('--format', choices=['mga', 'aid'], default='aid', help='format of the downloaded data: mga for M8 onwards, aid for u7 or earlier')
 parser.add_argument('-t', '--token', required=True, help='your token to access AssistNow data site')
-parser.add_argument('-d', '--device', required=True, help='the device/port where the GPS device is')
+parser.add_argument('-d', '--device', required=True, help='the device/port where to reach the GPS device')
 
 args = parser.parse_args()
 
@@ -39,7 +40,7 @@ if (args.lat and not args.lon) or (args.lat and not args.lon):
     print('Error: you need to use both latitude and longitude', file=sys.stderr)
     sys.exit(1)
 
-url = f'https://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid'
+url = f'https://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format={args.format}'
 if args.lat and args.lon:
     if args.lat > 90 or args.lat < -90 or args.lon > 180 or args.lon < -180:
         print('Error: latitude or longitude not in expected range', file=sys.stderr)
