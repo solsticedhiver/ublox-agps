@@ -1,11 +1,19 @@
 #!/bin/env /usr/bin/python3
 
-import requests
-import serial
 import sys
 import argparse
 import os
 import struct
+try:
+    import requests
+except ImportError as i:
+    print('You need the requests python module to be installed', file=sys.stderr)
+    sys.exit(1)
+try:
+    import serial
+except ImportError as i:
+    print('You need the pyserial python module to be installed', file=sys.stderr)
+    sys.exit(1)
 
 def checksum(data):
     a = b = 0
