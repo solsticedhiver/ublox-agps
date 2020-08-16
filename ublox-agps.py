@@ -86,7 +86,7 @@ if __name__ == '__main__':
         drainer = ser.inWaiting()
         ser.read(drainer)
 
-    print(f'Writing AGPS data to {args.device}')
+    print(f'Writing A-GPS data to {args.device}')
     ser.write(r.content)
     print('Done')
     print(':: Warning: we have not checked that the dongle acknowledged the data sent')

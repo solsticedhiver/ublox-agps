@@ -1,6 +1,6 @@
 # ublox-agps
 
-This is a simple python script to download AssistNow data from the u-blox server and then upload it to a u-blox GPS device.
+This is a simple *python script* to download **AssistNow data** from the *u-blox server* and then upload it to a u-blox GPS device.
 
 1. Request an access token
 
@@ -31,7 +31,7 @@ For example:
     Downloading A-GPS data from u-blox server
     Checksums are OK
     Waiting for GPS to be free
-    Writing AGPS data to /dev/gps0
+    Writing A-GPS data to /dev/gps0
     Done
     :: Warning: we have not checked that the dongle acknowledged the data sent
 
@@ -39,5 +39,6 @@ You can specify your latitude and longitude to get better ephemeris from the ser
 
     ./ublox-agps.py -t YYYYYYYYYY -d /dev/gps0 --lat 49 --lon 4.78
 
+Note: If you have got a M8 or any more recent u-blox device, you have to request the data using the `--format mga` switch.
 
-Tested with ublox-7 (u7) module. Use at your own risk.
+Tested with a u-blox 7 device. Use at your own risk.
