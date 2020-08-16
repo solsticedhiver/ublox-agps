@@ -22,6 +22,8 @@ def is_checksum_ok(ck_a, ck_b, data):
     return checksum(data) == (ck_a, ck_b)
 
 parser = argparse.ArgumentParser(description='Retrieve aiding data and update GPS module')
+parser.add_argument('--lat', type=float, help='your longitude')
+parser.add_argument('--lon', type=float, help='your latitude')
 parser.add_argument('-t', '--token', required=True, help='your token to access AssistNow data site')
 parser.add_argument('-d', '--device', required=True, help='the device/port where the GPS device is')
 
@@ -34,8 +36,21 @@ if not os.access(args.device, os.W_OK):
     print(f'Error: device {args.device} is not writable', file=sys.stderr)
     sys.exit(1)
 
+if (args.lat and not args.lon) or (args.lat and not args.lon):
+    print('Error: you need to use both latitude and longitude', file=sys.stderr)
+    sys.exit(1)
+
 url = f'http://online-live1.services.u-blox.com/GetOnlineData.ashx?token={args.token};gnss=gps;datatype=eph,alm,aux,pos;filteronpos;format=aid'
-print('Downloading A-GPS data')
+if args.lat and args.lon:
+    if args.lat > 90 or args.lat < -90 or args.lon > 180 or args.lon < -180:
+        print('Error: latitude or longitude not in expected range', file=sys.stderr)
+        sys.exit(1)
+    # add pacc field based on number of decimal of lat and lon
+    nd = min(len(str(args.lat).split('.')[1]), len(str(args.lon).split('.')[1]))
+    pacc = int(111000/10**nd)
+    url += f';lon={args.lon};lat={args.lat};pacc={pacc}'
+
+print('Downloading A-GPS data from u-blox server')
 r = requests.get(url)
 if r.status_code != 200:
     print(f'Error {r.status_code} {r.content.decode()}', file=sys.stderr)
