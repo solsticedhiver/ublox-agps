@@ -1,14 +1,11 @@
 # ublox-agps
-Script to send aiding data to a u-blox GPS module (aka agps)
 
-This is a simple example in python to write AssistNow GPS data downloaded from u-blox server to a u-blox GPS Module.
+This is a simple python script to download AssistNow data from the u-blox server and then upload it to a u-blox GPS device.
 
 1. Request an access token
 
-  To do so, go to the web site: https://www.u-blox.com/en/assistnow-service-registration-form and submit the form. In 24 hours, you will receive a message similar to this:
+  To do so, go to the web site: https://www.u-blox.com/en/assistnow-service-registration-form and submit the form. In a few working days, you will receive a message similar to this:
 
-> Get a token
->
 > Dear XXXXXX
 >
 > Thank you for your interest in u-blox' online, globally-available assisted GNSS service, AssistNow.
@@ -26,14 +23,15 @@ This is a simple example in python to write AssistNow GPS data downloaded from u
 > Kind regards
 > u-blox
 
-2. Configure the script
+2. Run the script with the token and your gps device
 
-You can either specify the token and the device on the command line by using the `-t` switch and the `-d` switch, or you can modify the script to hard-code both of the variables.
+For example:
 
-3. Run the script with
+    python3 ublox-agps.py -t YYYYYYYYYY -d /dev/gps0
 
-`python ublox-agps.py -t YYYYYYYYYY -d /dev/ttyACM0`
+You can specify your latitude and longitude to get better ephemeris from the server:
 
-**Note:** The idea of this project came from: https://gist.github.com/veproza/55ec6eaa612781ac29e7
+    ./ublox-agps.py -t YYYYYYYYYY -d /dev/gps0 --lat 49 --lon 4.78
 
-Tested in ublox-7 (u7) module
+
+Tested with ublox-7 (u7) module. Use at your own risk.
