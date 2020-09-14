@@ -75,7 +75,11 @@ if __name__ == '__main__':
         url += f';lon={args.lon};lat={args.lat};pacc={pacc}'
 
     print('Downloading A-GPS data from u-blox server')
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError as re:
+        print('Error: failed to connect to ublox server')
+        sys.exit(1)
     if r.status_code != 200:
         print(f'Error {r.status_code} {r.content.decode()}', file=sys.stderr)
         sys.exit(1)
