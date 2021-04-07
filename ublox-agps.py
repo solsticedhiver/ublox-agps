@@ -4,6 +4,7 @@ import sys
 import argparse
 import os
 import struct
+import socket # for handling exceptions
 try:
     import requests
 except ImportError as i:
@@ -77,8 +78,14 @@ if __name__ == '__main__':
     print('Downloading A-GPS data from u-blox server')
     try:
         r = requests.get(url)
+    except socket.gaierror as sg:
+        print('Error: failed to connect to ublox server (socket.gaierror)', file=sys.stderr)
+        sys.exit(1)
     except requests.exceptions.ConnectionError as re:
-        print('Error: failed to connect to ublox server')
+        print('Error: failed to connect to ublox server (requests.exceptions.ConnectionError)', file=sys.stderr)
+        sys.exit(1)
+    except requests.exceptions.NewConnectionError as re:
+        print('Error: failed to connect to ublox server (requests.exceptions.NewConnectionError)', file=sys.stderr)
         sys.exit(1)
     if r.status_code != 200:
         print(f'Error {r.status_code} {r.content.decode()}', file=sys.stderr)
